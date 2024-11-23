@@ -1,0 +1,134 @@
+﻿@using BlazorComponent
+@using BlazorDemo001.Models
+
+
+<div class="sidebar-header">
+    <span>BRESS</span>
+</div>
+<div class="sidebar-menu">
+    <MList Routable Rounded Style="background-color:#f1f3f4">
+        <MListItemGroup Color="primary">
+            @foreach (var navItem in _navItems)
+            {
+                @* 如果列表包含子项,则选用嵌套列表  *@
+                if (navItem.Children?.Any() is true)
+                {
+                    <MListGroup NoAction Group="@navItem.Group">
+                        <ActivatorContent>
+                            <MListItemIcon>
+                                <MIcon>@navItem.Icon</MIcon>
+                            </MListItemIcon>
+                            <MListItemContent>
+                                <MListItemTitle>@navItem.Name</MListItemTitle>
+                            </MListItemContent>
+                        </ActivatorContent>
+                        <ChildContent>
+                            @foreach (var subNavItem in navItem.Children)
+                            {
+                                <MListItem Href="@subNavItem.Url"
+                                           ActiveClass="select-item"
+                                           Exact="@subNavItem.Exact"
+                                           MatchPattern="@subNavItem.MatchPattern">
+                                    <MListItemContent>
+                                        <MListItemTitle>@subNavItem.Name</MListItemTitle>
+                                    </MListItemContent>
+                                </MListItem>
+                            }
+                        </ChildContent>
+                    </MListGroup>
+                }
+                else
+                {
+                    <MListItem Href="@navItem.Url"
+                               ActiveClass="select-item"
+                               Exact="@navItem.Exact"
+                               MatchPattern="@navItem.MatchPattern">
+                        <MListItemIcon>
+                            <MIcon>@navItem.Icon</MIcon>
+                        </MListItemIcon>
+                        <MListItemContent>
+                            <MListItemTitle>@navItem.Name</MListItemTitle>
+                        </MListItemContent>
+                    </MListItem>
+                }
+            }
+        </MListItemGroup>
+    </MList>
+</div>
+<div class="sidebar-footer">
+    <MAvatar>
+        <MImage Src="Images/tx.jpg"></MImage>
+    </MAvatar>
+    <span style="font-weight:600;">Yao</span>
+    <span class="subtitle-color">2740574036@qq.com</span>
+</div>
+
+
+
+@code {
+
+    private List<NavItem> _navItems = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            _navItems = new List<NavItem>()
+                {
+                    new NavItem()
+                    {
+                        Name = "Dashboard",
+                        Icon = "mdi-view-dashboard",
+                        Url = "/dashboard"
+                    },
+                    // new NavItem("Education",
+                    //     new List<NavItem>()
+                    //     {
+                    //         new NavItem("Courses", "/components/alerts"),
+                    //         new NavItem("Sertificate", "/components/buttons")
+                    //     }),
+                    // new NavItem("Resources",
+                    //     new List<NavItem>()
+                    //     {
+                    //         new NavItem("Genetics 101", "/components/alerts"),
+                    //         new NavItem("DNA synthesis", "/components/buttons"),
+                    //         new NavItem("Events", "/components/buttons")
+                    //     }),
+                    new NavItem()
+                    {
+                        Name = "Project",
+                        Icon = "mdi-chart-donut",
+                        Url = "/project"
+                    },
+                    new NavItem()
+                    {
+                        Name = "Task list",
+                        Icon = "mdi-view-list",
+                        Url = "/list"
+                    },
+                    new NavItem()
+                    {
+                        Name = "Services",
+                        Icon = "mdi-account-card",
+                        Url = "/services"
+                    },
+                    new NavItem()
+                    {
+                        Name = "Notifications",
+                        Icon = "mdi-bell-badge-outline",
+                        Url = "/notifications"
+                    },
+                    new NavItem()
+                    {
+                        Name = "Chat",
+                        Icon = "mdi-forum-outline",
+                        Url = "/chat"
+                    },
+                };
+
+            StateHasChanged();
+        }
+    }
+}

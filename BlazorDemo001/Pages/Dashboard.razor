@@ -1,0 +1,285 @@
+﻿@page "/"
+@page "/dashboard"
+@using BlazorComponent;
+@using BlazorDemo001.Models
+
+<div class="dashboard-container">
+    <div class="main">
+        <div class="header">
+            <span class="header-title">Expend Creativity</span>
+            <span class="header-subtitle">Collaborate Streamline,Create</span>
+        </div>
+
+        <div class="info-box">
+            <div class="box-Profit box">
+                <div class="profit-header">
+                    <div class="profit-header-title">
+                        <span>Profit</span>
+                        <span>$234,390</span>
+                    </div>
+                    <div class="profit-header-icon">
+                    </div>
+                </div>
+                <div class="profit-chart">
+@*                     <MECharts Option="_option" Width="@("80%")" Height="150">
+                    </MECharts>*@
+                    <div class="profit-chart-col">
+                        @foreach (var item in _colvalues)
+                        {
+                            var percentageHeight = item + "%";
+                            <div class="chart-col">
+                                <div style="height:@(percentageHeight)"></div>
+                            </div>
+                        }
+                    </div>
+                    <div class="profit-chart-value">
+                        <span>↙ 28%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="box-rating box">
+                <div class="rating-header">
+                    <span>Customer rating</span>
+                    <span>View All</span>
+                </div>
+                <div class="rating-info">
+                    @foreach (var item in _ratingInfoModels)
+                    {
+                        <div class="rating-info-list">
+                            <div class="rating-info-avatar"></div>
+                            <div class="rating-info-content">
+                                <span>@item.Name</span>
+                                <span>@item.Description</span>
+                            </div>
+                            <div class="rating-info-trend">
+                                <span>@item.Trend</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="main-chart">
+            <div class="chart-header">
+                <span>Productivity</span>
+                <MDivider 
+                    Vertical
+                >
+                </MDivider>
+                <div class="chart-tag-list">
+                    @foreach (var item in _tag)
+                    {
+                        <div class="chart-header-tag">
+                            <span style="color:@item.Color">●</span>
+                            <span>@item.Name</span>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="chart-content">
+                <div class="content-chart">
+                    <MECharts Option="_line" Height="@("100%")" >
+                    </MECharts> 
+                </div>
+                <div class="content-list">
+                    @foreach (var item in _progressModels)
+                    {
+                        <div class="content-progress">
+                            <span>@item.Title</span>
+                            <span>@item.Value</span>
+                            <MProgressCircular Value="@item.ProgressValue" Size="25" Color="@item.Color"></MProgressCircular>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="list">
+        <div class="list-top">
+            <div class="list-top-header">
+                <span>Top tasks today</span>
+                <span>View All</span>
+            </div>
+            <div class="list-info">
+                @foreach (var item in _cardModels)
+                {
+                    <div class="list-info-box">
+                        <div class="info-box-tag">
+                            <span style="background-color:@item.TagBackColor;color:@item.TagColor;">@item.TagContent</span>
+                        </div>
+                        <div class="info-box-title">
+                            <span>@item.Title</span>
+                            <span>@item.Date</span>
+                        </div>
+                        <div class="list-info-discuss">
+                            <div class="info-discuss-avatar">
+                            </div>
+                            <span class="info-discuss-count">@item.Count</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="list-bottom">
+            <span>Top Projects</span>
+            <div class="list-bottom-chart">
+                <div class="bottom-chart-title">
+                    <span>Loading Page</span>
+                    <span>for Angela Wilson</span>
+                </div>
+                <MProgressCircular Value="80" Size="40" Color="#7fa8c8"></MProgressCircular>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private object _option = new
+    {
+        XAxis = new
+        {
+            Data = new[] { "", "", "", "", "", "" }
+        },
+        YAxis = new { },
+        Series = new[]
+            {
+            new
+            {
+                Type= "bar",
+                Data= new []{ 5, 20, 36, 10, 10, 20 },
+                ShowBackground = true,
+                BackgroundStyle = new {
+                     color= "rgba(180, 180, 180, 0.2)"
+                }
+            }
+    }
+    };
+
+    private StringNumber[] _colvalues = new StringNumber[] { "20","60","40","10","80","30","60"  };
+
+
+    //Rating列表人员信息
+    private List<RatingInfoModel> _ratingInfoModels = new()
+    {
+        new RatingInfoModel()
+        {
+            Name="Angela Wilson",
+            Description="@angelawilson",
+            Trend="Nice"
+        },
+        new RatingInfoModel()
+        {
+            Name="Finn Foste",
+            Description="@FinnFoste",
+            Trend="Great"
+        },
+        new RatingInfoModel()
+        {
+            Name="yao",
+            Description="@yao",
+            Trend="makabaka"
+        }
+    };
+
+    //图表标签
+    private List<TagModel> _tag = new()
+    {
+        new TagModel(){ Color="#05aada",Name="Research" },
+        new TagModel(){ Color="#511a7e",Name="Design" }
+    };
+
+    //线性图
+    private object _line = new
+    {
+        XAxis = new
+        {
+            Type = "category",
+            Data = new[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" }
+        },
+        YAxis = new
+        {
+            Type = "value"
+        },
+        Series = new[]
+        {
+            new
+            {
+                Data = new []{1, 2, 1, 5, 3.5, 4, 2},
+                Smooth = true,
+                lineStyle = new {
+                    width=0
+                },
+                Type = "line",
+                symbol= "none", // 不显示数据点符号
+                showSymbol= false, // 进一步确认不显示数据点
+                areaStyle = new
+                {
+                    color = new
+                    {
+                        type = "linear",
+                        x = 0,
+                        y = 0,
+                        x2 = 0,
+                        y2 = 1,
+                        colorStops = new []
+                        {
+                            new { offset=0,color="#4ac0de" },
+                            new { offset=1,color="#def1f8" }
+                        },
+                        global=false
+                    }    
+                }
+            }
+    }
+    };
+
+    //图表进度
+    private List<ChartProgressModel> _progressModels = new()
+    {
+        new ChartProgressModel{ Color="#7d8b74", Value= "163h", ProgressValue="94", Title="Branding" },
+        new ChartProgressModel{ Color="#a6c0bd", Value= "101h", ProgressValue="76", Title="UI/UX" },
+        new ChartProgressModel{ Color="#696070", Value= "76h", ProgressValue="60", Title="Other" },
+    };
+
+    //卡片列表
+    private List<ListCardModel> _cardModels = new()
+    {
+        new ListCardModel
+        { 
+            TagContent="Branding",
+            TagBackColor="#ecfefe",
+            TagColor="#8fb2ae",
+            Title="Competitor review",
+            Date="21.03.23",
+            Count="10 comments"  
+        },
+        new ListCardModel
+        { 
+            TagContent="Design System",
+            TagBackColor="#e2dce6",
+            TagColor="#493d57",
+            Title="Refinement of the design system", 
+            Date="21.03.23",
+            Count="11 comments"  
+        },
+        new ListCardModel
+        { 
+            TagContent="Feedback",
+            TagBackColor="#ebf8e4",
+            TagColor="#46593d", 
+            Title="Introduce edits from the client", 
+            Date="21.03.23",
+            Count="8 comments"
+        },
+        new ListCardModel
+        {
+            TagContent="Feedback",
+            TagBackColor="#ebf8e4",
+            TagColor="#46593d",
+            Title="Introduce edits from the client",
+            Date="21.03.23",
+            Count="8 comments"
+        },
+    };
+}
